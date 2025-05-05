@@ -1,6 +1,6 @@
 ## 1. Project Overview
 
-The purpose of the project is to transform raw PCAP files (captured from multiple switches in a network topology) into structured, queryable data. This data is stored in a MySQL database, enabling easier analytics via SQL instead of parsing unstructured logs.
+The purpose of the project is to transform raw PCAP files (captured from multiple switches in a network topology) into structured, queryable data. This data is stored in a MySQL database, enabling easier analytics via SQL instead of parsing unstructured logs. Video demo: https://www.youtube.com/watch?v=PYUMdOuEPRg
 
 ---
 

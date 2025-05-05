@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Link Throughput</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 60px auto;
+      background: white;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      text-align: center;
+      color: #2c3e50;
+    }
+
+    nav {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: #3498db;
+      font-weight: bold;
+      margin: 0 10px;
+      font-size: 1rem;
+    }
+
+    nav a:hover {
+      color: #1d6fa5;
+    }
+
+    canvas {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>⚡ Link Throughput (Kbps)</h2>
+    <nav>
+      <a href="/packets_per_port">📊 Packets Per Port</a>
+      <a href="/link_throughput">⚡ Link Throughput</a>
+      <a href="/distinct_flows">🔀 Distinct Flows</a>
+      <a href="/flowlet_count">🌐 Flowlet Count</a>
+    </nav>
+    <canvas id="linkChart" height="400"></canvas>
+  </div>
+
+  <script>
+    fetch("/api/link_throughput")
+      .then(res => res.json())
+      .then(data => {
+        const labels = data.map(d => `${d.endpoint1} → ${d.endpoint2}`);
+        const kbps = data.map(d => d.kilobits_per_second);
+        new Chart(document.getElementById("linkChart"), {
+          type: 'bar',
+          data: {
+            labels: labels,
+            datasets: [{
+              label: 'Throughput (Kbps)',
+              data: kbps,
+              backgroundColor: '#2ecc71'
+            }]
+          },
+          options: {
+            indexAxis: 'y',
+            responsive: true,
+            plugins: {
+              legend: { display: false }
+            },
+            scales: {
+              x: {
+                title: {
+                  display: true,
+                  text: 'Kbps'
+                }
+              }
+            }
+          }
+        });
+      });
+  </script>
+</body>
+</html>

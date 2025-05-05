@@ -1,0 +1,22 @@
+Installed the following to connect to my DB with python
+
+pip install mysql-connector-python
+
+
+For SSH forwarding
+
+pip install sshtunnel
+
+
+Installed the following to dump the pcap files into text
+
+brew install wireshark
+
+
+MySQL
+Mininet
+P4
+MySQL Workbench
+AWS EC2
+
+chart.js

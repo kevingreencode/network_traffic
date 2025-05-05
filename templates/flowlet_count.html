@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Flowlet Count & Average Payload</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 60px auto;
+      background: white;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h2, h3 {
+      text-align: center;
+      color: #2c3e50;
+    }
+
+    nav {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    nav a {
+      margin: 0 10px;
+      text-decoration: none;
+      color: #3498db;
+      font-weight: bold;
+      font-size: 1rem;
+    }
+
+    nav a:hover {
+      color: #1d6fa5;
+    }
+
+    #count {
+      text-align: center;
+      font-size: 2.5em;
+      font-weight: bold;
+      color: #2c3e50;
+      margin-top: 10px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 12px;
+      text-align: center;
+    }
+
+    th {
+      background-color: #3498db;
+      color: white;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>🌐 Flowlet Count and Average Payload</h2>
+    <nav>
+      <a href="/packets_per_port">📊 Packets Per Port</a>
+      <a href="/link_throughput">⚡ Link Throughput</a>
+      <a href="/distinct_flows">🔀 Distinct Flows</a>
+      <a href="/flowlet_count">🌐 Flowlet Count & Avg Payload</a>
+    </nav>
+
+    <div>
+      <h3>Total Flowlets (Outbound Only)</h3>
+      <div id="count">Loading...</div>
+    </div>
+
+    <div>
+      <h3>Average Payload by Direction</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Capture Direction</th>
+            <th>Average Payload (bytes)</th>
+          </tr>
+        </thead>
+        <tbody id="avgPayloadTable"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    fetch("/api/flowlet_count")
+      .then(res => res.json())
+      .then(flowletData => {
+        document.getElementById("count").innerText = flowletData[0].estimated_outbound_flowlet_count;
+
+        fetch("/api/average_payload")
+          .then(res => res.json())
+          .then(payloadData => {
+            const tbody = document.getElementById("avgPayloadTable");
+            payloadData.forEach(row => {
+              const avg = parseFloat(row.avg_payload_length);
+              const tr = document.createElement("tr");
+              tr.innerHTML = `
+                <td>${row.capture_direction}</td>
+                <td>${isNaN(avg) ? 'N/A' : avg.toFixed(2)}</td>`;
+              tbody.appendChild(tr);
+            });
+          });
+      });
+  </script>
+</body>
+</html>

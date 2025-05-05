@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Distinct Flows</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 60px auto;
+      background: white;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      text-align: center;
+      color: #2c3e50;
+    }
+
+    nav {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: #3498db;
+      font-weight: bold;
+      margin: 0 10px;
+      font-size: 1rem;
+    }
+
+    nav a:hover {
+      color: #1d6fa5;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    th, td {
+      border: 1px solid #ccc;
+      padding: 12px;
+      text-align: center;
+    }
+
+    th {
+      background-color: #eaeef1;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f9fbfc;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Outbound Flows (with Total Bytes)</h2>
+    <nav>
+      <a href="/packets_per_port">📊 Packets Per Port</a>
+      <a href="/link_throughput">⚡ Link Throughput</a>
+      <a href="/distinct_flows">🔀 Distinct Flows</a>
+      <a href="/flowlet_count">🌐 Flowlet Count</a>
+    </nav>
+    <table>
+      <thead>
+        <tr>
+          <th>Src IP</th>
+          <th>Dst IP</th>
+          <th>Src Port</th>
+          <th>Dst Port</th>
+          <th>Protocol</th>
+          <th>Packet Count</th>
+          <th>Total Bytes</th>
+        </tr>
+      </thead>
+      <tbody id="flowTable"></tbody>
+    </table>
+  </div>
+
+  <script>
+    fetch("/api/distinct_flows")
+      .then(res => res.json())
+      .then(data => {
+        const tbody = document.getElementById("flowTable");
+        data.forEach(row => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${row.src_ip}</td>
+            <td>${row.dst_ip}</td>
+            <td>${row.src_l4_port}</td>
+            <td>${row.dst_l4_port}</td>
+            <td>${row.protocol}</td>
+            <td>${row.packet_count}</td>
+            <td>${row.total_bytes}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      });
+  </script>
+</body>
+</html>

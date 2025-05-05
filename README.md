@@ -1,10 +1,10 @@
-## 🧱 1. Project Overview
+## 1. Project Overview
 
 The purpose of the project is to transform raw PCAP files (captured from multiple switches in a network topology) into structured, queryable data. This data is stored in a MySQL database, enabling easier analytics via SQL instead of parsing unstructured logs.
 
 ---
 
-## 🔧 2. Key Components
+## 2. Key Components
 
 ### a. PCAP Ingestion Module
 
@@ -56,14 +56,14 @@ The purpose of the project is to transform raw PCAP files (captured from multipl
 
 ---
 
-## 🔒 3. Security and Access
+## 3. Security and Access
 
 - Database credentials stored in environment variables or `config.py` file.
 - PCAP data is sensitive—ensure encrypted transport (SSH) and secure storage.
 
 ---
 
-## 🔁 4. Workflow
+## 4. Workflow
 
 1. Place PCAP files (per switch) in a watched directory.
 2. Python loader.py script runs.
